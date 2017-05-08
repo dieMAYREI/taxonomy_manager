@@ -31,10 +31,13 @@ class AdvancedTaxonomyLoeschenForm extends FormBase
      */
     public function buildForm(array $form, FormStateInterface $form_state)
     {
-        /** @var $tid */
-        $tid = $_REQUEST['tid'];
+        /** @var  $route_match */
+        $route_match = \Drupal::service('current_route_match');
 
-        $this->vid = $_REQUEST['vid'];
+        /** @var  $tid */
+        $tid = $route_match->getParameter('tid');
+
+        $this->vid = $route_match->getParameter('vid');
 
         /** get other values */
         if (!$form_state->getValue('form_id')) {
@@ -131,30 +134,23 @@ class AdvancedTaxonomyLoeschenForm extends FormBase
      */
     public function submitForm(array &$form, FormStateInterface $form_state)
     {
-
-        /**
-         * Set form_state values with requested values
-         * @var $key
-         * @var $param
-         */
-        foreach ($_REQUEST as $key => $param) {
-            $form_state->setValue($key, $param);
-        }
-
         $this->updateDrupalDatabase($form_state->getValue('tid'));
 
         /** @var  $term */
         $term = Term::load($form_state->getValue('tid'));
+        $name = $term->getName();
         $term->delete();
 
         /** Set redirect to advanced_taxonomy_form with the actual vocabulary (vid) */
         /** @var $vid */
         $vid = array(
-            'vid' => $_REQUEST['vid'],
+            'vid' => $this->vid,
         );
 
         /** @var $options */
         $options = array();
+
+        drupal_set_message($name . ' deleted!', 'status', TRUE);
 
         $form_state->setRedirect('advanced_taxonomy.form', $vid, $options);
 
@@ -172,7 +168,7 @@ class AdvancedTaxonomyLoeschenForm extends FormBase
         /** Set redirect to advanced_taxonomy_form */
         /** @var $vid */
         $vid = array(
-            'vid' => $_REQUEST['vid'],
+            'vid' => $this->vid,
         );
 
         /** @var $options */

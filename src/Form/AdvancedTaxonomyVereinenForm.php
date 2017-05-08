@@ -18,6 +18,9 @@ class AdvancedTaxonomyVereinenForm extends FormBase
     /** @var $tids */
     private $tids;
 
+    /** @var $vid */
+    private $vid;
+
     /**
      * {@inheritdoc}
      */
@@ -35,6 +38,10 @@ class AdvancedTaxonomyVereinenForm extends FormBase
     {
 
         $this->tids = array();
+
+        if (isset($_REQUEST['vid'])) {
+            $this->vid = $_REQUEST['vid'];
+        }
 
         /** @var $arraySelect */
         $arraySelect = array();
@@ -68,7 +75,7 @@ class AdvancedTaxonomyVereinenForm extends FormBase
         /** Textfield with the new name */
         $form['addfield'] = array(
             '#type' => 'textfield',
-            '#title' => t('New Name: (replaces the name of the selected term and delete other one!)'),
+            '#title' => t('New Name: (replaces the name of the selected term and deletes other one!)'),
         );
 
         /** AbbrechenButton */
@@ -141,23 +148,32 @@ class AdvancedTaxonomyVereinenForm extends FormBase
             /** Set redirect to advanced_taxonomy_form */
             /** @var $vid */
             $vid = array(
-                'vid' => $_REQUEST['vid'],
+                'vid' => $this->vid,
             );
 
             /** @var $options */
             $options = array();
 
+            drupal_set_message('Merge succesfully!', 'status', TRUE);
             $form_state->setRedirect('advanced_taxonomy.form', $vid, $options);
 
 
         } else {
 
             /** If name already exists redirect and throw message */
-            drupal_set_message(t('Name already exists!'), 'status', TRUE);
+            drupal_set_message(t('Name already exists!'), 'error', TRUE);
+
+            /**
+             * Set tids and vid to redirect after name already exists
+             * @var  $redirectArray
+             */
+            $redirectArray = array();
+            $redirectArray[] = $this->tids;
+            $redirectArray['vid'] = $this->vid;
 
             $options = array();
 
-            $form_state->setRedirect('advanced_taxonomy_Vereinen.form', $_REQUEST, $options);
+            $form_state->setRedirect('advanced_taxonomy_Vereinen.form', $redirectArray, $options);
 
         }
 
@@ -175,7 +191,7 @@ class AdvancedTaxonomyVereinenForm extends FormBase
         /** Set redirect to advanced_taxonomy_form */
         /** @var $vid */
         $vid = array(
-            'vid' => $_REQUEST['vid'],
+            'vid' => $this->vid,
         );
 
         /** @var $options */
@@ -203,6 +219,7 @@ class AdvancedTaxonomyVereinenForm extends FormBase
          * Load terms
          * @var  $param
          */
+
         foreach ($_REQUEST as $param) {
 
             $terms[] = Term::load($param);

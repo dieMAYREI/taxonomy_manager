@@ -7,7 +7,7 @@ advanced_taxonomy.form:
     _permission: 'administer site configuration'
 
 advanced_taxonomy_Loeschen.form:
-  path: '/admin/advanced_taxonomy-loeschen/{}'
+  path: '/admin/advanced_taxonomy-loeschen/{vid}/{tid}'
   defaults:
     _form: '\Drupal\advanced_taxonomy\Form\AdvancedTaxonomyLoeschenForm'
     _title: 'AdvancedTaxonomyLoeschenForm'
