@@ -1,0 +1,23 @@
+advanced_taxonomy.form:
+  path: '/admin/advanced_taxonomy-form'
+  defaults:
+    _form: '\Drupal\advanced_taxonomy\Form\AdvancedTaxonomyForm'
+    _title: 'AdvancedTaxonomyForm'
+  requirements:
+    _permission: 'administer site configuration'
+
+advanced_taxonomy_Loeschen.form:
+  path: '/admin/advanced_taxonomy-loeschen'
+  defaults:
+    _form: '\Drupal\advanced_taxonomy\Form\AdvancedTaxonomyLoeschenForm'
+    _title: 'AdvancedTaxonomyLoeschenForm'
+  requirements:
+    _permission: 'administer site configuration'
+
+advanced_taxonomy_Vereinen.form:
+  path: '/admin/advanced_taxonomy-vereinen'
+  defaults:
+    _form: '\Drupal\advanced_taxonomy\Form\AdvancedTaxonomyVereinenForm'
+    _title: 'AdvancedTaxonomyVereinenForm'
+  requirements:
+    _permission: 'administer site configuration'

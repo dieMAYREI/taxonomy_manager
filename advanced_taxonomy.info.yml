@@ -1,0 +1,4 @@
+name: advanced_taxonomy
+description: Taxonomy Manager Module
+type: module
+core: 8.x
