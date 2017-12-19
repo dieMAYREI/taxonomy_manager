@@ -1,5 +1,6 @@
 <?php
-namespace Drupal\advanced_taxonomy\Form;
+
+namespace Drupal\taxonomy_manager\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -8,10 +9,10 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Deletes the selected term with requested tid.
  *
- * Class AdvancedTaxonomyLoeschenForm
- * @package Drupal\advanced_taxonomy\Form
+ * Class TaxonomyManagerLoeschenForm
+ * @package Drupal\taxonomy_manager\Form
  */
-class AdvancedTaxonomyLoeschenForm extends FormBase
+class TaxonomyManagerDeleteForm extends FormBase
 {
     /** @var $vid */
     private $vid;
@@ -21,7 +22,7 @@ class AdvancedTaxonomyLoeschenForm extends FormBase
      */
     public function getFormId()
     {
-        return 'advanced_taxonomy_loeschenForm';
+	    return 'taxonomy_manager_delete_form';
     }
 
     /**
@@ -141,7 +142,7 @@ class AdvancedTaxonomyLoeschenForm extends FormBase
         $name = $term->getName();
         $term->delete();
 
-        /** Set redirect to advanced_taxonomy_form with the actual vocabulary (vid) */
+	    /** Set redirect to taxonomy_manager_form with the actual vocabulary (vid) */
         /** @var $vid */
         $vid = array(
             'vid' => $this->vid,
@@ -152,12 +153,12 @@ class AdvancedTaxonomyLoeschenForm extends FormBase
 
         drupal_set_message($name . ' deleted!', 'status', TRUE);
 
-        $form_state->setRedirect('advanced_taxonomy.form', $vid, $options);
+	    $form_state->setRedirect( 'taxonomy_manager.index', $vid, $options );
 
     }
 
     /**
-     * Redirects to AdvancedTaxonomyForm
+     * Redirects to TaxonomyManagerForm
      *
      * @param array $form
      * @param FormStateInterface $form_state
@@ -165,7 +166,7 @@ class AdvancedTaxonomyLoeschenForm extends FormBase
     public function abbrechenSubmitHandler(array &$form, FormStateInterface $form_state)
     {
 
-        /** Set redirect to advanced_taxonomy_form */
+	    /** Set redirect to taxonomy_manager_form */
         /** @var $vid */
         $vid = array(
             'vid' => $this->vid,
@@ -174,7 +175,7 @@ class AdvancedTaxonomyLoeschenForm extends FormBase
         /** @var $options */
         $options = array();
 
-        $form_state->setRedirect('advanced_taxonomy.form', $vid, $options);
+	    $form_state->setRedirect( 'taxonomy_manager.index', $vid, $options );
 
     }
 
@@ -197,7 +198,7 @@ class AdvancedTaxonomyLoeschenForm extends FormBase
         while ($row = $references->fetchAssoc()) {
 
             /** @var $data */
-            $data = unserialize($row['data']);
+	        $data = unserialize( $row['data'], true );
 
             if (isset($data['field_type'])) {
 

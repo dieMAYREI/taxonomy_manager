@@ -1,0 +1,24 @@
+taxonomy_manager.index:
+  path: '/admin/taxonomy-manager/form'
+  defaults:
+    _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerIndexForm'
+    _title: 'Term form'
+  requirements:
+    _permission: 'administer site configuration'
+
+
+taxonomy_manager.delete:
+  path: '/admin/taxonomy-manager/delete/{vid}/{tid}'
+  defaults:
+    _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerDeleteForm'
+    _title: 'Term delete'
+  requirements:
+    _permission: 'administer site configuration'
+
+taxonomy_manager.merge:
+  path: '/admin/taxonomy-manager/merge'
+  defaults:
+    _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerMergeForm'
+    _title: 'Term merge'
+  requirements:
+    _permission: 'administer site configuration'

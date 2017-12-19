@@ -1,5 +1,6 @@
 <?php
-namespace Drupal\advanced_taxonomy\Form;
+
+namespace Drupal\taxonomy_manager\Form;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormBase;
@@ -9,14 +10,13 @@ use Drupal\taxonomy\Entity\Term;
 /**
  *  Combines two selected terms to one.
  *
- * Class AdvancedTaxonomyVereinenForm
- * @package Drupal\advanced_taxonomy\Form
+ * Class TaxonomyManagerVereinenForm
+ * @package Drupal\taxonomy_manager\Form
  */
-class AdvancedTaxonomyVereinenForm extends FormBase
-{
+class TaxonomyManagerMergeForm extends FormBase {
 
-    /** @var $tids */
-    private $tids;
+	/** @var array $tids */
+	private $tids = [];
 
     /** @var $vid */
     private $vid;
@@ -26,7 +26,7 @@ class AdvancedTaxonomyVereinenForm extends FormBase
      */
     public function getFormId()
     {
-        return 'advanced_taxonomy_vereinenForm';
+	    return 'taxonomy_manager_merge_form';
     }
 
     /**
@@ -36,8 +36,6 @@ class AdvancedTaxonomyVereinenForm extends FormBase
      */
     public function buildForm(array $form, FormStateInterface $form_state)
     {
-
-        $this->tids = array();
 
         if (isset($_REQUEST['vid'])) {
             $this->vid = $_REQUEST['vid'];
@@ -124,15 +122,10 @@ class AdvancedTaxonomyVereinenForm extends FormBase
          * @var $new_vid
          */
         if ($form_state->getValue('addfield') != "") {
-
-            $new_name = $form_state->getValue(('addfield'));
-            $resultNewName = $this->checkNameAlreadyExists($new_name);
-
-
+	        $new_name      = $form_state->getValue( ( 'addfield' ) );
+	        $resultNewName = $this->checkIfNameAlreadyExists( $new_name );
         } else {
-
             $new_name = $this->getName($new_tid);
-
         }
 
         /*
@@ -145,7 +138,7 @@ class AdvancedTaxonomyVereinenForm extends FormBase
             $this->updateDrupalDatabase($new_tid);
             $this->deleteTidsFieldData($new_tid);
 
-            /** Set redirect to advanced_taxonomy_form */
+	        /** Set redirect to taxonomy_manager_form */
             /** @var $vid */
             $vid = array(
                 'vid' => $this->vid,
@@ -155,7 +148,7 @@ class AdvancedTaxonomyVereinenForm extends FormBase
             $options = array();
 
             drupal_set_message('Merge succesfully!', 'status', TRUE);
-            $form_state->setRedirect('advanced_taxonomy.form', $vid, $options);
+	        $form_state->setRedirect( 'taxonomy_manager.form', $vid, $options );
 
 
         } else {
@@ -173,22 +166,22 @@ class AdvancedTaxonomyVereinenForm extends FormBase
 
             $options = array();
 
-            $form_state->setRedirect('advanced_taxonomy_Vereinen.form', $redirectArray, $options);
+	        $form_state->setRedirect( 'taxonomy_manager_Vereinen.form', $redirectArray, $options );
 
         }
 
     }
 
     /**
-     * Redirects to AdvancedTaxonomyForm
+     * Redirects to TaxonomyManagerForm
      *
      * @param array $form
      * @param FormStateInterface $form_state
      */
-    public function abbrechenSubmitHandler(array &$form, FormStateInterface $form_state)
+	public function cancelSubmitHandler( array &$form, FormStateInterface $form_state )
     {
 
-        /** Set redirect to advanced_taxonomy_form */
+	    /** Set redirect to taxonomy_manager_form */
         /** @var $vid */
         $vid = array(
             'vid' => $this->vid,
@@ -197,7 +190,7 @@ class AdvancedTaxonomyVereinenForm extends FormBase
         /** @var $options */
         $options = array();
 
-        $form_state->setRedirect('advanced_taxonomy.form', $vid, $options);
+	    $form_state->setRedirect( 'taxonomy_manager.form', $vid, $options );
 
     }
 
@@ -273,15 +266,12 @@ class AdvancedTaxonomyVereinenForm extends FormBase
 
         /** @var  $param */
         foreach ($this->tids as $param) {
-
             if ($param != $tid) {
-
                 /** @var  $term */
                 $term = Term::load($param);
                 $term->delete();
 
             }
-
         }
 
     }
@@ -330,7 +320,7 @@ class AdvancedTaxonomyVereinenForm extends FormBase
             while ($row = $references->fetchAssoc()) {
 
                 /** @var $data */
-                $data = unserialize($row['data']);
+	            $data = unserialize( $row['data'], true );
 
                 if (isset($data['field_type'])) {
 
@@ -350,11 +340,8 @@ class AdvancedTaxonomyVereinenForm extends FormBase
 
                         /** Delete tid from reference table if there is more than one tid */
                         while ($total > 1) {
-
                             $this->deleteTidFromReferenceTable($tableName, $fieldName, $tid);
-
                             $total--;
-
                         }
 
                         /** Update tid in reference tables */
@@ -378,13 +365,13 @@ class AdvancedTaxonomyVereinenForm extends FormBase
     public function getReferences()
     {
 
-        /** @var $query_references */
-        $query_references = \Drupal::database()->select('config', 'data');
-        $query_references->condition('data', "%" . $query_references->escapeLike('entity_reference') . "%", 'LIKE');
-        $query_references->fields('data', array('data'));
-
         /** @var $references */
-        $references = $query_references->execute();
+	    $references = \Drupal::database()->select( 'config', 'data' );
+	    $references->condition( 'data', "%" . $references->escapeLike( 'entity_reference' ) . "%", 'LIKE' );
+	    $references->fields( 'data', array( 'data' ) );
+
+	    /** @var $references */
+	    $references = $references->execute();
 
         return $references;
 
@@ -400,13 +387,12 @@ class AdvancedTaxonomyVereinenForm extends FormBase
     public function getTotalCountReferenceTable($tableName, $fieldName)
     {
 
-        /** @var $query_all */
-        $query_all = \Drupal::database()->select($tableName, 'data');
-        $query_all->fields('data', array($fieldName));
-        $resultTotal = $query_all->execute()->fetchAll();
-        $totalCount = count($resultTotal);
+	    /** @var $query */
+	    $query = \Drupal::database()->select( $tableName, 'data' );
+	    $query->fields( 'data', array( $fieldName ) );
+	    $total = $query->execute()->fetchAll();
 
-        return $totalCount;
+	    return count( $total );
 
     }
 
@@ -420,10 +406,10 @@ class AdvancedTaxonomyVereinenForm extends FormBase
     public function deleteTidFromReferenceTable($tableName, $fieldName, $tid)
     {
 
-        /** @var $query_delete_tid */
-        $query_delete_tid = \Drupal::database()->delete($tableName);
-        $query_delete_tid->condition($fieldName, $tid);
-        $query_delete_tid->execute();
+	    /** @var $delete */
+	    $delete = \Drupal::database()->delete( $tableName );
+	    $delete->condition( $fieldName, $tid );
+	    $delete->execute();
 
     }
 
@@ -437,12 +423,11 @@ class AdvancedTaxonomyVereinenForm extends FormBase
      */
     public function updateTidReferenceTable($tableName, $fieldName, $tid, $oldTid)
     {
-
-        /** @var $query_updateTables */
-        $query_updateTables = \Drupal::database()->update($tableName);
-        $query_updateTables->fields([$fieldName => $tid]);
-        $query_updateTables->condition($fieldName, $oldTid);
-        $query_updateTables->execute();
+	    /** @var $update */
+	    $update = \Drupal::database()->update( $tableName );
+	    $update->fields( [ $fieldName => $tid ] );
+	    $update->condition( $fieldName, $oldTid );
+	    $update->execute();
 
     }
 
@@ -451,20 +436,18 @@ class AdvancedTaxonomyVereinenForm extends FormBase
      * @param $newName
      * @return int
      */
-    public function checkNameAlreadyExists($newName)
+	public function checkIfNameAlreadyExists( $newName )
     {
 
-        /** @var  $query_all */
-        $query_all = \Drupal::entityQuery('taxonomy_term');
-        $query_all->condition('name', '%' . \Drupal::database()->escapeLike($newName) . '%', 'LIKE');
+	    /** @var  $query */
+	    $query = \Drupal::entityQuery( 'taxonomy_term' );
+	    $query->condition( 'name', '%' . \Drupal::database()->escapeLike( $newName ) . '%', 'LIKE' );
 
         /** @var  $name */
-        $name = $query_all->execute();
+	    $name = $query->execute();
 
         if ($name != null) {
-
             return -1;
-
         }
 
         return 0;

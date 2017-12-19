@@ -1,0 +1,7 @@
+name: taxonomy_manager
+description: Taxonomy Manager Module
+package: agrarheute
+
+type: module
+core: 8.x
+
