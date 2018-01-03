@@ -10,7 +10,7 @@ All changes to the taxonomy terms also affect their content references.
 ## Features
 
 * Terms are searchable (singe and multiple)
-* Multiple delete for Terms
+* Delete multiple Terms at once
 * Merge multiple Terms to one Term
 * User permissions to view single Vocabularies
 
