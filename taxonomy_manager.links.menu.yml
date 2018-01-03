@@ -1,0 +1,6 @@
+taxonomy_manager.admin:
+  title: 'Taxonomy Manager'
+  description: 'Manage your taxonomy vocabulary much easier'
+  parent: system.admin_structure
+  route_name: taxonomy_manager.form
+  weight: 100

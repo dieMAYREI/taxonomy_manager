@@ -1,0 +1,6 @@
+taxonomy manager settings page:
+  title: 'Taxonomy Manager Settings Access'
+  description: 'Access the Taxonomy Manager settings page'
+
+permission_callbacks:
+  - Drupal\taxonomy_manager\TaxonomyManagerPermissions::permissions

@@ -1,7 +1,5 @@
-name: taxonomy_manager
-description: Taxonomy Manager Module
-package: agrarheute
-
+name: Taxonomy Manager
+description: Easier Taxonomy Managing
 type: module
 core: 8.x
-
+configure: taxonomy_manager.form
