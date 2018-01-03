@@ -1,5 +1,5 @@
 {
-    "name": "dieMAYREI/taxonomy_manager",
+    "name": "diemayrei/taxonomy_manager",
     "type": "drupal-module",
     "license": "MIT",
     "require": {
