@@ -1,6 +1,6 @@
 {
     "name": "diemayrei/taxonomy_manager",
-    "type": "library",
+    "type": "drupal-module",
     "license": "MIT",
     "minimum-stability": "dev",
     "require": {}

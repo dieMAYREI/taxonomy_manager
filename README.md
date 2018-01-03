@@ -1,1 +1,1 @@
-# taxonomy-manager
+# Taxonomy Manager
