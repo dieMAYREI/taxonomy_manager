@@ -4,20 +4,24 @@
 [![Latest Stable Version][ico-githubversion]][link-releases]
 [![Total Downloads][ico-downloads]][link-packagist]
 
-Description
+Taxonomy Manager is a Plugin which allows easier Managing for Taxonomy Terms.
+All changes to the taxonomy terms also affect their content references.
 
 ## Features
 
-* 
+* Terms are searchable (singe and multiple)
+* Multiple delete for Terms
+* Merge multiple Terms to one Term
+* User permissions to view single Vocabularies
 
 ## Install
 
 * Using composer: `$ composer require diemayrei/taxonomy_manager`
-* 
 
 ## Usage
 
-
+- To Manage your Taxonomy Terms go to Stucture >> Taxonomy Manager
+- To Manage Access Permissions go to Users >> Permissions >> Taxonomy Manager
 
 ## Changelog
 
