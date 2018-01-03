@@ -1,0 +1,7 @@
+{
+    "name": "diemayrei/taxonomy_manager",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {}
+}
