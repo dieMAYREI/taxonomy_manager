@@ -23,6 +23,8 @@ All changes to the taxonomy terms also affect their content references.
 - To Manage your Taxonomy Terms go to Stucture >> Taxonomy Manager
 - To Manage Access Permissions go to Users >> Permissions >> Taxonomy Manager
 
+You can also access both URLs via extensions >> Taxonomy Manager
+
 ## Changelog
 
 Please see the [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
