@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
+## 1.0.1 - 2018-01-04
+
 ### Changed
 - removed unnecessary title
 - removed blank lines
