@@ -3,3 +3,4 @@ description: Easier Taxonomy Managing
 type: module
 core: 8.x
 configure: taxonomy_manager.form
+package: Taxonomy

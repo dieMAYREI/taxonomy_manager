@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
+### Added
+- added drupal package information
+
 ### Fixed
 - fixed search issue with special characters
 
