@@ -216,23 +216,7 @@ class TaxonomyManagerIndexForm extends FormBase {
 			],
 		];
 
-		/** Text output */
-		$form['terms'] = [
-			'#type'  => 'item',
-			'#title' => $this->t( 'Terms: ' . $this->total ),
-		];
-
 		return $form;
-
-	}
-
-	/**
-	 * @param array $form
-	 * @param FormStateInterface $form_state
-	 * {@inheritdoc}
-	 */
-	public function validateForm( array &$form, FormStateInterface $form_state ) {
-
 	}
 
 	/**
@@ -567,7 +551,7 @@ class TaxonomyManagerIndexForm extends FormBase {
 
 			if ( isset( $data['field_type'] ) ) {
 
-				if ( $data['field_type'] == 'entity_reference' ) {
+				if ( $data['field_type'] === 'entity_reference' ) {
 
 					/** @var $tableName */
 					$tableName = $data['entity_type'] . '__' . $data['field_name'];

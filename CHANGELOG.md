@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
+### Changed
+- removed unnecessary title
+- removed blank lines
+
 ### Added
 - added drupal package information
 

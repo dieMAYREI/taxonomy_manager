@@ -58,7 +58,6 @@ class TaxonomyManagerDeleteForm extends AbstractTaxonomyManagerForm {
 
       /** @var $langcode */
       $langcode = $term->get('langcode')->getString();
-
     }
 
     /**

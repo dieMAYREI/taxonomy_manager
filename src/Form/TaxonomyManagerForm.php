@@ -218,13 +218,6 @@ class TaxonomyManagerForm extends AbstractTaxonomyManagerForm
                 'vid'    => $form_state->getValue('vid'),
             ],
         ];
-
-        /** Text output */
-        $form['terms'] = [
-            '#type'  => 'item',
-            '#title' => $this->t('Terms: ' . $this->total),
-        ];
-
         return $form;
     }
 
@@ -252,7 +245,6 @@ class TaxonomyManagerForm extends AbstractTaxonomyManagerForm
         $redirectArray = [];
 
         if ($form_state->getValue('search') !== '') {
-
             /** @noinspection ReferenceMismatchInspection */
             $redirectArray['search'] = $form_state->getValue('search');
         }
