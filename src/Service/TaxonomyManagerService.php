@@ -99,6 +99,7 @@ class TaxonomyManagerService
 
             foreach ($suchArray as $searchString) {
                 $searchString = trim($searchString);
+                $charSafeSearchString = iconv('UTF-8', 'ASCII//TRANSLIT', $searchString);
                 $group->condition(
                     'name', '%' . \Drupal::database()
                         ->escapeLike($searchString) . '%', 'LIKE'
@@ -109,11 +110,11 @@ class TaxonomyManagerService
                 );
                 $group->condition(
                     'vid', '%' . \Drupal::database()
-                        ->escapeLike($searchString) . '%', 'LIKE'
+                        ->escapeLike($charSafeSearchString) . '%', 'LIKE'
                 );
                 $group->condition(
                     'langcode', '%' . \Drupal::database()
-                        ->escapeLike($searchString) . '%', 'LIKE'
+                        ->escapeLike($charSafeSearchString) . '%', 'LIKE'
                 );
             }
 

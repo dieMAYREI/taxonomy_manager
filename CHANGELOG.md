@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
+### Fixed
+- fixed search issue with special characters
 
 ## 1.0.0 - 2018-01-04
 ### Added
