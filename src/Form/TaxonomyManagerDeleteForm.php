@@ -154,7 +154,7 @@ class TaxonomyManagerDeleteForm extends TaxonomyManagerAbstractForm
 
         drupal_set_message($name . ' deleted!', 'status', true);
 
-        $form_state->setRedirect('taxonomy_manager.form', $vid, $options);
+        $form_state->setRedirect('taxonomy_manager.index', $vid, $options);
     }
 
 
@@ -195,6 +195,6 @@ class TaxonomyManagerDeleteForm extends TaxonomyManagerAbstractForm
         /** @var $options */
         $options = [];
 
-        $form_state->setRedirect('taxonomy_manager.form', $vid, $options);
+        $form_state->setRedirect('taxonomy_manager.index', $vid, $options);
     }
 }

@@ -109,7 +109,7 @@ class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
             'selectedName' => (int)$form_state->getValue('name_select')
         ];
 
-        $form_state->setRedirect('taxonomy_manager.merge.confirm.form', $options);
+        $form_state->setRedirect('taxonomy_manager.index.merge.confirm', $options);
     }
 
     /**
@@ -142,6 +142,6 @@ class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
         /** @var $options */
         $options = [];
 
-        $form_state->setRedirect('taxonomy_manager.form', $vid, $options);
+        $form_state->setRedirect('taxonomy_manager.index', $vid, $options);
     }
 }

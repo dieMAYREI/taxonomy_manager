@@ -75,7 +75,7 @@ class TaxonomyManagerIndexForm extends TaxonomyManagerAbstractForm {
 		}
 
 		/** Set form action */
-		$form['#action'] = Url::fromRoute( 'taxonomy_manager.form' )
+		$form['#action'] = Url::fromRoute( 'taxonomy_manager.index' )
 		                      ->toString() . '?page=' . $form_state->getValue( 'page' );
 
 		/** Selectfield with the vocabulary (vid) */
@@ -229,7 +229,7 @@ class TaxonomyManagerIndexForm extends TaxonomyManagerAbstractForm {
 		/** @var $options */
 		$options = [];
 
-		$form_state->setRedirect( 'taxonomy_manager.form', $redirectArray,
+		$form_state->setRedirect( 'taxonomy_manager.index', $redirectArray,
 			$options );
 	}
 

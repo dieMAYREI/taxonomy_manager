@@ -139,7 +139,7 @@ class TaxonomyManagerMultiDeleteForm extends TaxonomyManagerAbstractForm
             'status', true
         );
 
-        $form_state->setRedirect('taxonomy_manager.form', $vid, $options);
+        $form_state->setRedirect('taxonomy_manager.index', $vid, $options);
     }
 
     /**
@@ -156,6 +156,6 @@ class TaxonomyManagerMultiDeleteForm extends TaxonomyManagerAbstractForm
         /** @var $options */
         $options = [];
 
-        $form_state->setRedirect('taxonomy_manager.form', $vid, $options);
+        $form_state->setRedirect('taxonomy_manager.index', $vid, $options);
     }
 }

@@ -188,7 +188,7 @@ class TaxonomyManagerService
                                     'query' =>
                                         [
                                             'destination' => Url::fromRoute(
-                                                'taxonomy_manager.form',
+                                                'taxonomy_manager.index',
                                                 ['vid' => $vid]
                                             )
                                                 ->toString(),
@@ -199,7 +199,7 @@ class TaxonomyManagerService
                         'delete' => [
                             'title' => $this->t('Delete'),
                             'url'   => URL::fromRoute(
-                                'taxonomy_manager.delete.form'
+                                'taxonomy_manager.index.delete'
                             )
                                 ->setRouteParameters(
                                     [

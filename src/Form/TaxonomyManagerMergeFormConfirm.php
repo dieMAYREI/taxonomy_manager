@@ -41,7 +41,7 @@ class TaxonomyManagerMergeFormConfirm extends TaxonomyManagerAbstractForm
         $this->newName = $this->getRequest()->get('newName');
         $this->selectedName = $this->getRequest()->get('selectedName');
 
-        $options = $this->service->getReferencesResults($this->tids);
+        $rows = $this->service->getReferencesResults($this->tids);
 
         /** Table header */
         $header = [
@@ -62,7 +62,7 @@ class TaxonomyManagerMergeFormConfirm extends TaxonomyManagerAbstractForm
         $form['table'] = [
             '#type'       => 'table',
             '#header'     => $header,
-            '#rows'    => $options,
+            '#rows'    => $rows,
             '#empty'      => t( 'no results found!' ),
             '#attributes' => [ 'style' => 'margin-top: 12px;' ],
         ];
@@ -103,6 +103,6 @@ class TaxonomyManagerMergeFormConfirm extends TaxonomyManagerAbstractForm
             $this->selectedName
         );
 
-        $form_state->setRedirect('taxonomy_manager.form', $vid, $options);
+        $form_state->setRedirect('taxonomy_manager.index', $vid, $options);
     }
 }

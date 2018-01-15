@@ -1,4 +1,4 @@
-taxonomy_manager.form:
+taxonomy_manager.index:
   path: '/admin/structure/taxonomy_manager'
   defaults:
     _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerForm'
@@ -6,7 +6,7 @@ taxonomy_manager.form:
   requirements:
     _permission: 'taxonomy manager settings page'
 
-taxonomy_manager.delete.form:
+taxonomy_manager.index.delete:
   path: '/admin/structure/taxonomy_manager-delete/{vid}/{tid}'
   defaults:
     _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerDeleteForm'
@@ -14,23 +14,23 @@ taxonomy_manager.delete.form:
   requirements:
     _permission: 'administer site configuration'
 
-taxonomy_manager.merge.form:
-  path: '/admin/structure/taxonomy_manager-merge'
+taxonomy_manager.index.merge:
+  path: '/admin/structure/taxonomy_manager/merge'
   defaults:
     _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerMergeForm'
-    _title: 'Taxonomy Manager - Merge'
+    _title: 'Merge Terms'
   requirements:
     _permission: 'administer site configuration'
 
-taxonomy_manager.merge.confirm.form:
-  path: '/admin/structure/taxonomy_manager-merge/confirm'
+taxonomy_manager.index.merge.confirm:
+  path: '/admin/structure/taxonomy_manager/merge/confirm'
   defaults:
     _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerMergeFormConfirm'
     _title: 'Taxonomy Manager - Merge - Confirm'
   requirements:
     _permission: 'administer site configuration'
 
-taxonomy_manager.multidelete.form:
+taxonomy_manager.index.multidelete:
   path: '/admin/structure/taxonomy_manager-multidelete'
   defaults:
     _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerMultiDeleteForm'

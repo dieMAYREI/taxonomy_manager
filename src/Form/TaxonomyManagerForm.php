@@ -75,7 +75,7 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
         }
 
         /** Set form action */
-        $form['#action'] = Url::fromRoute('taxonomy_manager.form')
+        $form['#action'] = Url::fromRoute('taxonomy_manager.index')
                 ->toString() . '?page=' . $form_state->getValue('page');
 
         /** Selectfield with the vocabulary (vid) */
@@ -242,7 +242,7 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
         $options = [];
 
         $form_state->setRedirect(
-            'taxonomy_manager.form', $redirectArray, $options
+            'taxonomy_manager.index', $redirectArray, $options
         );
     }
 
@@ -270,7 +270,7 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
         $uebergabeArray = $this->service->getSelectedTids($form, $form_state);
 
         $form_state->setRedirect(
-            'taxonomy_manager.merge.form', $uebergabeArray,
+            'taxonomy_manager.index.merge', $uebergabeArray,
             $options = []
         );
     }
@@ -284,7 +284,7 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
         $uebergabeArray = $this->service->getSelectedTids($form, $form_state);
 
         $form_state->setRedirect(
-            'taxonomy_manager.multidelete.form', $uebergabeArray,
+            'taxonomy_manager.index.multidelete', $uebergabeArray,
             $options = []
         );
     }

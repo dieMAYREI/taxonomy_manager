@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
+## 1.1.1 - 2018-01-15
+
+### Changed
+- few routes were changed
+- routing file clean up
+
 ## 1.1.0 - 2018-01-15
 
 ### Added 
