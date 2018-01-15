@@ -13,7 +13,7 @@ use Drupal\Core\Url;
  *
  * @package Drupal\taxonomy_manager\Form
  */
-class TaxonomyManagerForm extends AbstractTaxonomyManagerForm
+class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
 {
     /** @var array $header */
     private $header;
@@ -217,16 +217,6 @@ class TaxonomyManagerForm extends AbstractTaxonomyManagerForm
         return $form;
     }
 
-    public function validateForm(array &$form, FormStateInterface $form_state)
-    {
-        parent::validateForm(
-            $form, $form_state
-        );
-
-        if(!in_array($form_state->getValue('vid'), taxonomy_vocabulary_get_names())){
-            $form_state->setErrorByName('vid', $this->t('The Vocabulary does not exist!'));
-        }
-    }
 
     /**
      * @param array              $form
@@ -257,34 +247,18 @@ class TaxonomyManagerForm extends AbstractTaxonomyManagerForm
     }
 
     /**
-     * @param $form
-     * @param $form_state
-     *
-     * @return array
+     * @param array                                $form
+     * @param \Drupal\Core\Form\FormStateInterface $form_state
      */
-    public function getSelectedTids($form, $form_state)
+    public function validateForm(array &$form, FormStateInterface $form_state)
     {
-        /** @var array $vereinenArray */
-        $vereinenArray = $form['table']['#value'];
+        parent::validateForm(
+            $form, $form_state
+        );
 
-        /** @var array $tidArray */
-        $uebergabeArray = [];
-
-        /** @var $i */
-        $i = 1;
-
-        /** Add values to tidArray */
-        foreach ($vereinenArray as $key => $vereinenValue) {
-
-            /** @var $valTid */
-            $valTid                  = 'tid' . $i;
-            $uebergabeArray[$valTid] = $vereinenValue;
-            $i++;
+        if(!in_array($form_state->getValue('vid'), taxonomy_vocabulary_get_names())){
+            $form_state->setErrorByName('vid', $this->t('The Vocabulary does not exist!'));
         }
-
-        $uebergabeArray['vid'] = $form_state->getValue('vid');
-
-        return $uebergabeArray;
     }
 
     /**
@@ -293,7 +267,7 @@ class TaxonomyManagerForm extends AbstractTaxonomyManagerForm
      */
     public function mergeSubmitHandler(array &$form, FormStateInterface $form_state)
     {
-        $uebergabeArray = $this->getSelectedTids($form, $form_state);
+        $uebergabeArray = $this->service->getSelectedTids($form, $form_state);
 
         $form_state->setRedirect(
             'taxonomy_manager.merge.form', $uebergabeArray,
@@ -307,7 +281,7 @@ class TaxonomyManagerForm extends AbstractTaxonomyManagerForm
      */
     public function deleteSubmitHandler(array &$form, FormStateInterface $form_state
     ) {
-        $uebergabeArray = $this->getSelectedTids($form, $form_state);
+        $uebergabeArray = $this->service->getSelectedTids($form, $form_state);
 
         $form_state->setRedirect(
             'taxonomy_manager.multidelete.form', $uebergabeArray,

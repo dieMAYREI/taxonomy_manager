@@ -24,9 +24,6 @@ class TaxonomyManagerService
     /** @var integer $results_total */
     private $results_total;
 
-    /** @var array $tids */
-    private $tids;
-
     /**
      * @param $values
      * @param $vid
@@ -261,7 +258,7 @@ class TaxonomyManagerService
      *
      * @return array
      */
-    public function getTidName($tids)
+    public function getMultipleTidNames($tids)
     {
         /** @var array $terms */
         $terms = [];
@@ -286,6 +283,22 @@ class TaxonomyManagerService
             }
         }
         return $elementArray;
+    }
+
+    /**
+     * Returns the required new name from selected tid
+     *
+     * @param $tid
+     * @return mixed|null|string
+     */
+    public function getSingleTidName($tid)
+    {
+        /** @var  $term */
+        $term = Term::load($tid);
+        /** @var  $name */
+        $name = $term->getName();
+
+        return $name;
     }
 
     /**
@@ -317,6 +330,37 @@ class TaxonomyManagerService
         }
 
         return $return;
+    }
+
+    /**
+     * @param $form
+     * @param $form_state
+     *
+     * @return array
+     */
+    public function getSelectedTids($form, $form_state)
+    {
+        /** @var array $vereinenArray */
+        $vereinenArray = $form['table']['#value'];
+
+        /** @var array $tidArray */
+        $uebergabeArray = [];
+
+        /** @var $i */
+        $i = 1;
+
+        /** Add values to tidArray */
+        foreach ($vereinenArray as $key => $vereinenValue) {
+
+            /** @var $valTid */
+            $valTid                  = 'tid' . $i;
+            $uebergabeArray[$valTid] = $vereinenValue;
+            $i++;
+        }
+
+        $uebergabeArray['vid'] = $form_state->getValue('vid');
+
+        return $uebergabeArray;
     }
 
     /**

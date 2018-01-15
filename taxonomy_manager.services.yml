@@ -2,4 +2,4 @@ services:
   taxonomy_manager.manager_service:
     class: Drupal\taxonomy_manager\Service\TaxonomyManagerService
   taxonomy_manager.merge_service:
-    class: Drupal\taxonomy_manager\Service\MergeTermsService
+    class: Drupal\taxonomy_manager\Service\TaxonomyManagerMergeService

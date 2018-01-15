@@ -12,7 +12,7 @@ use Drupal\taxonomy\Entity\Term;
  *
  * @package Drupal\taxonomy_manager\Form
  */
-class TaxonomyManagerMultiDeleteForm extends AbstractTaxonomyManagerForm
+class TaxonomyManagerMultiDeleteForm extends TaxonomyManagerAbstractForm
 {
 
     /** @var $vid */
@@ -43,7 +43,7 @@ class TaxonomyManagerMultiDeleteForm extends AbstractTaxonomyManagerForm
         $arraySelect = [];
 
         /** @var $array_elements */
-        $array_elements = $this->service->getTidName(
+        $array_elements = $this->service->getMultipleTidNames(
             $this->getRequest()->query
         );
 

@@ -11,16 +11,15 @@ namespace Drupal\taxonomy_manager\Service;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Core\Cache\Cache;
 
-class MergeTermsService
+class TaxonomyManagerMergeService
 {
-
     /**
      * @var TaxonomyManagerService mixed
      */
     protected $service;
 
     /**
-     * MergeTermsService constructor.
+     * TaxonomyManagerMergeService constructor.
      */
     public function __construct()
     {
@@ -123,7 +122,7 @@ class MergeTermsService
         $arraySelect = [];
 
         /** @var array $array_elements */
-        $array_elements = $this->service->getTidName($query);
+        $array_elements = $this->service->getMultipleTidNames($query);
 
         /* Adds arraySelect the value with key in () */
         foreach ($array_elements as $key => $value) {

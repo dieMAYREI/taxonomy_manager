@@ -12,7 +12,7 @@ use Drupal\taxonomy\Entity\Term;
  *
  * @package Drupal\taxonomy_manager\Form
  */
-class TaxonomyManagerMergeForm extends AbstractTaxonomyManagerForm
+class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
 {
 
     /** @var $vid */
@@ -90,18 +90,6 @@ class TaxonomyManagerMergeForm extends AbstractTaxonomyManagerForm
         return $form;
     }
 
-    public function validateForm(array &$form, FormStateInterface $form_state)
-    {
-        if ($this->merge_service->checkIfNameAlreadyExists(
-            $form_state->getValue('addfield'), $form_state->getValue('vid')
-        )
-        ) {
-            $form_state->setErrorByName(
-                'addfield', $this->t('Term with this name already exists!')
-            );
-        }
-    }
-
     /**
      * @param array              $form
      * @param FormStateInterface $form_state
@@ -112,7 +100,7 @@ class TaxonomyManagerMergeForm extends AbstractTaxonomyManagerForm
         if ($this->getRequest()->get('addfield') != '') {
             $newName = $this->getRequest()->get('addfield');
         } else {
-            $newName = $this->getTermName($form_state->getValue('name_select'));
+            $newName = $this->service->getSingleTidName($form_state->getValue('name_select'));
         }
 
         $this->merge_service->mergeTerms(
@@ -133,19 +121,19 @@ class TaxonomyManagerMergeForm extends AbstractTaxonomyManagerForm
     }
 
     /**
-     * Returns the required new name from selected tid
-     *
-     * @param $tid
-     * @return mixed|null|string
+     * @param array                                $form
+     * @param \Drupal\Core\Form\FormStateInterface $form_state
      */
-    public function getTermName($tid)
+    public function validateForm(array &$form, FormStateInterface $form_state)
     {
-        /** @var  $term */
-        $term = Term::load($tid);
-        /** @var  $name */
-        $name = $term->getName();
-
-        return $name;
+        if ($this->merge_service->checkIfNameAlreadyExists(
+            $form_state->getValue('addfield'), $form_state->getValue('vid')
+        )
+        ) {
+            $form_state->setErrorByName(
+                'addfield', $this->t('Term with this name already exists!')
+            );
+        }
     }
 
     /**
@@ -163,23 +151,5 @@ class TaxonomyManagerMergeForm extends AbstractTaxonomyManagerForm
         $options = [];
 
         $form_state->setRedirect('taxonomy_manager.form', $vid, $options);
-    }
-
-    /**
-     * Deletes the other tids from the table
-     *
-     * @param $tid
-     */
-    public function deleteTidsFieldData($tid)
-    {
-        /** @var  $param */
-        foreach ($this->tids as $param) {
-
-            if ($param !== $tid) {
-                /** @var  $term */
-                $term = Term::load($param);
-                $term->delete();
-            }
-        }
     }
 }

@@ -5,7 +5,7 @@ namespace Drupal\taxonomy_manager\Form;
 use Drupal\Core\Form\FormBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\taxonomy_manager\Service\TaxonomyManagerService;
-use Drupal\taxonomy_manager\Service\MergeTermsService;
+use Drupal\taxonomy_manager\Service\TaxonomyManagerMergeService;
 
 /**
  * The start form of the taxonomy manager.
@@ -15,7 +15,7 @@ use Drupal\taxonomy_manager\Service\MergeTermsService;
  *
  * @package Drupal\taxonomy_manager\Form
  */
-abstract class AbstractTaxonomyManagerForm extends FormBase
+abstract class TaxonomyManagerAbstractForm extends FormBase
 {
 
     /** @var array $tids */
@@ -27,7 +27,7 @@ abstract class AbstractTaxonomyManagerForm extends FormBase
     protected $service;
 
     /**
-     * @var MergeTermsService
+     * @var TaxonomyManagerMergeService
      */
     protected $merge_service;
 
