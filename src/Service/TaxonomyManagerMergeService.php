@@ -19,7 +19,7 @@ class TaxonomyManagerMergeService
     protected $service;
 
     /**
-     * TaxonomyManagerMergeService constructor.
+     * MergeTermsService constructor.
      */
     public function __construct()
     {

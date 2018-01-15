@@ -167,7 +167,6 @@ class TaxonomyManagerIndexForm extends TaxonomyManagerAbstractForm {
 		/**
 		 * Set options of table with the results from function getResults
 		 */
-
 		$this->results = $this->service->getResults( $form_state->getValue( 'suche' ),
 			$form_state->getValue( 'vid' ) );
 
@@ -190,7 +189,7 @@ class TaxonomyManagerIndexForm extends TaxonomyManagerAbstractForm {
 			'#type'       => 'tableselect',
 			'#header'     => $this->header,
 			'#options'    => $options,
-			'#empty'      => t( 'no results found!!!' ),
+			'#empty'      => t( 'no results found!' ),
 			'#attributes' => [ 'style' => 'margin-top: 12px;' ],
 		];
 
@@ -232,7 +231,6 @@ class TaxonomyManagerIndexForm extends TaxonomyManagerAbstractForm {
 
 		$form_state->setRedirect( 'taxonomy_manager.form', $redirectArray,
 			$options );
-
 	}
 
 	/**
@@ -269,7 +267,6 @@ class TaxonomyManagerIndexForm extends TaxonomyManagerAbstractForm {
 		$options = [];
 
 		$form_state->setRedirect( 'taxonomy_manager.index', $vid, $options );
-
 	}
 
 	/**

@@ -103,21 +103,13 @@ class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
             $newName = $this->service->getSingleTidName($form_state->getValue('name_select'));
         }
 
-        $this->merge_service->mergeTerms(
-            $this->tids,
-            $newName,
-            (int)$form_state->getValue('name_select')
-        );
-
-        /** Set redirect to taxonomy_manager_form */
-        /** @var $vid */
-        $vid = [
-            'vid' => $this->vid,
+        $options = [
+            'tids' => $this->tids,
+            'newName' => $newName,
+            'selectedName' => (int)$form_state->getValue('name_select')
         ];
 
-        $options = [];
-
-        $form_state->setRedirect('taxonomy_manager.form', $vid, $options);
+        $form_state->setRedirect('taxonomy_manager.merge.confirm.form', $options);
     }
 
     /**

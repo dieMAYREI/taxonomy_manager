@@ -6,7 +6,6 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\user\Entity\User;
 
 /**
  * Class TaxonomyManagerService
@@ -15,7 +14,6 @@ use Drupal\user\Entity\User;
  */
 class TaxonomyManagerService
 {
-
     use StringTranslationTrait;
 
     /** @var integer $results_pro_page */
@@ -78,7 +76,6 @@ class TaxonomyManagerService
             $query_all->condition('vid', $vid);
 
         } else {
-
             /**
              * Set default value with first element of the array
              *
@@ -222,12 +219,71 @@ class TaxonomyManagerService
     }
 
     /**
+     * @param $tids
+     *
+     * @return array
+     */
+    public function getReferencesResults($tids){
+
+        /**
+         * @var array $names
+         */
+        $names = $this->getMultipleTidNames($tids);
+
+        /**
+         * @var array $results
+         */
+        $results = $this->getTablesToUpdate();
+        $counter = 0;
+        $my_array = [];
+
+        foreach($results as $key => $result){
+
+            foreach($names as $tid => $name){
+
+                /**
+                 * @var array $occurrences
+                 */
+                $occurrences = $this->getOccurrences($key, $result, $tid);
+                $occurrences = count($occurrences);
+
+                if($occurrences > 0){
+                    $my_array[$counter] = [
+                        'tablename' => $key,
+                        'tag_name' => $name,
+                        'occurrences' => $occurrences
+                    ];
+                }
+
+                $counter++;
+            }
+        }
+
+        return $my_array;
+    }
+
+    /**
+     * @param $field
+     * @param $tid
+     *
+     * @return string
+     */
+    public function getOccurrences($table, $field, $tid){
+
+        $query_selectReferences = \Drupal::database()->select($table, 'tbl');
+        $query_selectReferences->condition($field, $tid);
+        $query_selectReferences->fields('tbl');
+        $return = $query_selectReferences->execute();
+
+        return $return->fetchAll();
+    }
+
+    /**
      * @return array
      * @throws \Drupal\Core\Database\InvalidQueryException
      */
     public function getTablesToUpdate()
     {
-
         /** @var $query_references */
         $query_references = \Drupal::database()->select('config', 'data');
         $query_references->condition(
@@ -282,6 +338,7 @@ class TaxonomyManagerService
                 $elementArray[$id] = $name;
             }
         }
+
         return $elementArray;
     }
 

@@ -5,13 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
+## 1.1.0 - 2018-01-15
+
+### Added 
+- overview of the references before merging
+
 ## 1.0.3 - 2018-01-15
 
 ### Changed
 - All classes have uniform names
 - IndexForm now extends AbstractForm
 - IndexForm now uses service methods
-- Few more methodes were moved to service
+- Few more methods were moved to service
 
 ## 1.0.2 - 2018-01-05
 

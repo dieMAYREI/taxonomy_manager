@@ -22,6 +22,14 @@ taxonomy_manager.merge.form:
   requirements:
     _permission: 'administer site configuration'
 
+taxonomy_manager.merge.confirm.form:
+  path: '/admin/structure/taxonomy_manager-merge/confirm'
+  defaults:
+    _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerMergeFormConfirm'
+    _title: 'Taxonomy Manager - Merge - Confirm'
+  requirements:
+    _permission: 'administer site configuration'
+
 taxonomy_manager.multidelete.form:
   path: '/admin/structure/taxonomy_manager-multidelete'
   defaults:
@@ -29,3 +37,4 @@ taxonomy_manager.multidelete.form:
     _title: 'Taxonomy Manager - Multidelete'
   requirements:
     _permission: 'administer site configuration'
+
