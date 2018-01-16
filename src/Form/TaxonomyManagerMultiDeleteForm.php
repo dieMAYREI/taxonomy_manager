@@ -18,6 +18,12 @@ class TaxonomyManagerMultiDeleteForm extends TaxonomyManagerAbstractForm
     /** @var $vid */
     private $vid;
 
+    protected $tidsReq;
+
+    protected $newName;
+
+    protected $selectedName;
+
     /**
      * {@inheritdoc}
      */
@@ -34,10 +40,32 @@ class TaxonomyManagerMultiDeleteForm extends TaxonomyManagerAbstractForm
     public function buildForm(array $form, FormStateInterface $form_state)
     {
         $this->tids = [];
+        $counter = 1;
+
+        while($this->getRequest()->get('tid'.$counter) != null){
+            $this->tidsReq[] = $this->getRequest()->get('tid'.$counter);
+            $counter++;
+        };
+
+        $rows = $this->service->getReferencesResults($this->tidsReq);
 
         if (null !== $this->getRequest()->get('vid')) {
             $this->vid = $this->getRequest()->get('vid');
         }
+
+        $header = [
+
+            'tablename' => t( 'tablename' ),
+
+            'tag_name' => [
+                'data'      => t( 'tag name' ),
+                'field'     => $form_state->getValue( 'order' ),
+                'sort'      => $form_state->getValue( 'sort' ),
+                'specifier' => 'tag_name',
+            ],
+
+            'occurrences'    => t( 'occurrences' ),
+        ];
 
         /** @var $arraySelect */
         $arraySelect = [];
@@ -78,9 +106,13 @@ class TaxonomyManagerMultiDeleteForm extends TaxonomyManagerAbstractForm
          * Set form values
          */
 
-        /** tid textfield */
-        $form['termlist'] = [
-            '#markup' => $termlist,
+        /** Table */
+        $form['table'] = [
+            '#type'       => 'table',
+            '#header'     => $header,
+            '#rows'    => $rows,
+            '#empty'      => t( 'no results found!' ),
+            '#attributes' => [ 'style' => 'margin-top: 12px;' ],
         ];
 
         /** Text output */

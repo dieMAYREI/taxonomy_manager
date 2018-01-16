@@ -115,7 +115,6 @@ class TaxonomyManagerMergeService
      */
     public function getMergeableTerms($query)
     {
-
         $tids = [];
 
         /** @var array $arraySelect */
@@ -129,7 +128,7 @@ class TaxonomyManagerMergeService
 
             if ($key !== '') {
                 $tids[]            = $key;
-                $arraySelect[$key] = $value . ' ( tid: ' . $key . ' )';
+                $arraySelect[$value] = $value . ' ( tid: ' . $key . ' )';
             }
         }
 

@@ -51,7 +51,7 @@ class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
          */
 
         $form['vid'] = [
-            '#type'    => 'hidden',
+            '#type'  => 'hidden',
             '#value' => $vid,
         ];
 
@@ -87,6 +87,12 @@ class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
             '#button_type' => 'primary',
         ];
 
+        $form['#attached'] = [
+            'library' => array(
+                'taxonomy_manager/taxonomy_manager_library',
+            ),
+        ];
+
         return $form;
     }
 
@@ -100,16 +106,20 @@ class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
         if ($this->getRequest()->get('addfield') != '') {
             $newName = $this->getRequest()->get('addfield');
         } else {
-            $newName = $this->service->getSingleTidName($form_state->getValue('name_select'));
+            $newName = $this->service->getSingleTidName(
+                $form_state->getValue('name_select')
+            );
         }
 
         $options = [
-            'tids' => $this->tids,
-            'newName' => $newName,
-            'selectedName' => (int)$form_state->getValue('name_select')
+            'tids'         => $this->tids,
+            'newName'      => $newName,
+            'selectedName' => (int)$form_state->getValue('name_select'),
         ];
 
-        $form_state->setRedirect('taxonomy_manager.index.merge.confirm', $options);
+        $form_state->setRedirect(
+            'taxonomy_manager.index.merge.confirm', $options
+        );
     }
 
     /**

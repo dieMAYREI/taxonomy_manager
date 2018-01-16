@@ -1,0 +1,4 @@
+taxonomy_manager_library:
+    version: 1.x
+    js:
+      js/taxonomy_manager.js: {}

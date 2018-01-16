@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
+## 1.1.2 - 2018-01-16
+
+### Changed
+- multi delete route was changed
+- name of the active term while merging now displays in the textfield
+
+###Added
+- references table on multi delete confirm page added
+
 ## 1.1.1 - 2018-01-15
 
 ### Changed

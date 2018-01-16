@@ -224,7 +224,6 @@ class TaxonomyManagerService
      * @return array
      */
     public function getReferencesResults($tids){
-
         /**
          * @var array $names
          */

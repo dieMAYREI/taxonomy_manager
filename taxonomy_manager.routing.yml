@@ -31,7 +31,7 @@ taxonomy_manager.index.merge.confirm:
     _permission: 'administer site configuration'
 
 taxonomy_manager.index.multidelete:
-  path: '/admin/structure/taxonomy_manager-multidelete'
+  path: '/admin/structure/taxonomy_manager/multidelete'
   defaults:
     _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerMultiDeleteForm'
     _title: 'Taxonomy Manager - Multidelete'
