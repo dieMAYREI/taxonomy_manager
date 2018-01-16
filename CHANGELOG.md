@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - multi delete route was changed
 - name of the active term while merging now displays in the textfield
 
-###Added
+### Added
 - references table on multi delete confirm page added
 
 ## 1.1.1 - 2018-01-15
