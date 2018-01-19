@@ -77,7 +77,8 @@ class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
             '#type'        => 'submit',
             '#value'       => $this->t('Cancel'),
             '#button_type' => 'primary',
-            '#submit'      => ['::abbrechenSubmitHandler'],
+            '#submit'      => ['::cancelSubmitHandler'],
+            '#attributes'  => ['style' => 'margin-left: 0px;'],
         ];
 
         /** SubmitButton */
@@ -85,12 +86,6 @@ class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
             '#type'        => 'submit',
             '#value'       => $this->t('Merge'),
             '#button_type' => 'primary',
-        ];
-
-        $form['#attached'] = [
-            'library' => array(
-                'taxonomy_manager/taxonomy_manager_library',
-            ),
         ];
 
         return $form;
@@ -115,6 +110,7 @@ class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
             'tids'         => $this->tids,
             'newName'      => $newName,
             'selectedName' => (int)$form_state->getValue('name_select'),
+            'vid' => $this->getRequest()->get('vid'),
         ];
 
         $form_state->setRedirect(
@@ -141,7 +137,7 @@ class TaxonomyManagerMergeForm extends TaxonomyManagerAbstractForm
     /**
      * @param \Drupal\Core\Form\FormStateInterface $form_state
      */
-    public function cancelSubmitHandler(FormStateInterface $form_state)
+    public function cancelSubmitHandler(array &$form, FormStateInterface $form_state)
     {
         /** Set redirect to taxonomy_manager_form */
         /** @var $vid */

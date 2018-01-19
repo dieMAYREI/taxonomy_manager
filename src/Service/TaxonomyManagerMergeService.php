@@ -128,7 +128,7 @@ class TaxonomyManagerMergeService
 
             if ($key !== '') {
                 $tids[]            = $key;
-                $arraySelect[$value] = $value . ' ( tid: ' . $key . ' )';
+                $arraySelect[$key] = $value . ' ( tid: ' . $key . ' )';
             }
         }
 

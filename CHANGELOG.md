@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
+## 1.2.0 - 2018-01-16
+
+### Added
+- added usages table on the single delete page
+- added description to the usages tables
+
+### Changed
+- removed autofill javascript
+
 ## 1.1.2 - 2018-01-16
 
 ### Changed

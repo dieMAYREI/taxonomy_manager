@@ -106,6 +106,35 @@ class TaxonomyManagerMultiDeleteForm extends TaxonomyManagerAbstractForm
          * Set form values
          */
 
+      $term_names  = $this->service->getMultipleTidNames($this->tids);
+
+      if(in_array($this->newName, $term_names)){
+        unset($term_names[$this->selectedName]);
+      }
+
+      if (count($term_names) > 1) {
+        $term_names_string = '';
+
+        foreach ($term_names as $term_name) {
+          if(empty($term_names_string)){
+            $term_names_string = $term_names_string . '"' . $term_name . '"';
+          }else{
+            $term_names_string = $term_names_string . ', "' . $term_name . '"';
+          }
+        }
+
+        $form['label'] = [
+          '#type'        => 'item',
+          '#description' => 'Die Terme ' . $term_names_string . ' werden gelöscht! <br><br> In folgenden Feldern werden Aktualisierungen durchgeführt:',
+        ];
+      }
+      else {
+        $form['label'] = [
+          '#type'        => 'item',
+          '#description' => 'Das Term "' . reset($term_names) . '" wird gelöscht! <br><br> In folgenden Feldern werden Aktualisierungen durchgeführt:',
+        ];
+      }
+
         /** Table */
         $form['table'] = [
             '#type'       => 'table',
@@ -127,6 +156,7 @@ class TaxonomyManagerMultiDeleteForm extends TaxonomyManagerAbstractForm
             '#value'       => $this->t('Cancel'),
             '#button_type' => 'primary',
             '#submit'      => ['::cancelSubmitHandler'],
+            '#attributes' => [ 'style' => 'margin-left: 0px;' ],
         ];
 
         /** SubmitButton */

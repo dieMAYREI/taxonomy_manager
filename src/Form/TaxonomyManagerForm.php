@@ -102,7 +102,7 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
             '#type'        => 'search',
             '#value'       => $form_state->getValue('search'),
             '#description' => t(
-                'Hier können mehrere Begriffe gleichzeitig eingegeben werden. Es werden alle Vorkommnisse der Begriffe gesucht.<br> Beachten Sie bitte, dass bei der Suche nach mehreren Begriffen jeder Begriff mit einem Komma <br> getrennt ist. Beispiel: begriff 1, begriff 2'
+                'Hier können mehrere Begriffe oder TIDs gleichzeitig eingegeben werden. Es werden alle Vorkommnisse der Begriffe gesucht.<br> Beachten Sie bitte, dass bei der Suche nach mehreren Begriffen jeder Begriff mit einem Komma <br> getrennt ist. Beispiel: begriff 1, begriff 2'
             ),
         ];
 
