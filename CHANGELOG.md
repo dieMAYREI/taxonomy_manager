@@ -5,7 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
-## 1.2.0 - 2018-01-16
+## 1.2.1 - 2018-01-19
+
+### Fixed
+- fixed the cancel button on merge confirm page
+
+## 1.2.0 - 2018-01-19
 
 ### Added
 - added usages table on the single delete page
