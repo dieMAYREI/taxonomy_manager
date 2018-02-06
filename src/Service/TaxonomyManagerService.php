@@ -17,7 +17,7 @@ class TaxonomyManagerService
     use StringTranslationTrait;
 
     /** @var integer $results_pro_page */
-    private $results_pro_page = 50;
+    private $results_pro_page = 100;
 
     /** @var integer $results_total */
     private $results_total;
