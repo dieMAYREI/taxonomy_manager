@@ -101,7 +101,6 @@ class TaxonomyManagerMergeService
     private function deleteOtherTerms(array $tids, $targetTid)
     {
         foreach ($tids as $tid) {
-            var_dump($tid, $targetTid);
             if ($tid !== $targetTid) {
                 Term::load($tid)->delete();
             }
