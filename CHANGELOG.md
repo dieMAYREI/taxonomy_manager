@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
-## 1.2.2 - 2019-06-05
+## 1.2.4 - 2019-06-05
 
 ### Fixed
 - taxonomy_index table doesnt loose the record on tags-merge anymore
