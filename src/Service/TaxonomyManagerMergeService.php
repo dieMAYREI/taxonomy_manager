@@ -42,6 +42,8 @@ class TaxonomyManagerMergeService
             throw new \RuntimeException('Term not found');
         }
 
+        $this->updateTaxonomyIndexTable($tids, $targetTid);
+
         $this->renameTerm($newName, $term);
 
         $this->updateReferences($tids, $targetTid);
@@ -49,6 +51,25 @@ class TaxonomyManagerMergeService
         $this->deleteOtherTerms($tids, $targetTid);
 
         drupal_set_message('Merge succesfully!', 'status', true);
+    }
+
+    /**
+     * @param $tids
+     * @param $targetTid
+     */
+    public function updateTaxonomyIndexTable($tids, $targetTid){
+        if (($key = array_search($targetTid, $tids)) !== false) {
+            unset($tids[$key]);
+        }
+
+        $db = \Drupal::database();
+
+        foreach($tids as $tid){
+            $db->update('taxonomy_index')
+               ->fields(array('tid' => $targetTid))
+               ->condition('tid', $tid, "=")
+               ->execute();
+        }
     }
 
     /**
