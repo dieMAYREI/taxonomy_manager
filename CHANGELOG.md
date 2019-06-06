@@ -5,14 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
+## 1.3.0 - 2019-06-06
+
+### Added
+- "drush updateTaxonomyIndex" command to readd missing entries in the taxonomy_index table
+
 ## 1.2.4 - 2019-06-05
 
 ### Fixed
 - taxonomy_index table doesnt loose the record on tags-merge anymore
 
 ## 1.2.3
+- uncommented
 
 ## 1.2.2
+- uncommented
 
 ## 1.2.1 - 2018-01-19
 
