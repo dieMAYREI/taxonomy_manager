@@ -37,7 +37,7 @@ class TaxonomyManagerPermissions implements ContainerInjectionInterface {
      * {@inheritdoc}
      */
     public static function create(ContainerInterface $container) {
-        return new static($container->get('entity.manager'));
+        return new static($container->get('entity_type.manager'));
     }
 
     /**
