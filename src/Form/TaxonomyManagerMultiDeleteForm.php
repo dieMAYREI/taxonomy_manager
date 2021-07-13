@@ -196,7 +196,8 @@ class TaxonomyManagerMultiDeleteForm extends TaxonomyManagerAbstractForm
         /** @var $options */
         $options = [];
 
-        drupal_set_message(
+        $message = \Drupal::messenger();
+        $message->addMessage(
             t('%name has been deleted.', ['%name' => implode(', ', $namen)]),
             'status', true
         );

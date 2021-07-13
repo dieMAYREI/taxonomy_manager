@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Unreleased
 
+## 1.4.2 - 2021-07-13
+- add Drupal 9 compatibility
+
 ## 1.3.0 - 2019-06-06
 
 ### Added
@@ -52,7 +55,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## 1.1.0 - 2018-01-15
 
-### Added 
+### Added
 - overview of the references before merging
 
 ## 1.0.3 - 2018-01-15

@@ -2,10 +2,12 @@
 
 namespace Drupal\taxonomy_manager\Service;
 
+use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Class TaxonomyManagerService
@@ -21,6 +23,8 @@ class TaxonomyManagerService
 
     /** @var integer $results_total */
     private $results_total;
+
+    private $pager;
 
     /**
      * @param $values
@@ -121,12 +125,10 @@ class TaxonomyManagerService
         $this->results_total = $totalCountTerms;
 
         /** @var $page */
-        $page = pager_default_initialize(
-            $this->results_total, $this->results_pro_page
-        );
+        $page = \Drupal::service('pager.manager')->createPager($this->results_total, $this->results_pro_page);
 
         /** @var $offset */
-        $offset = $this->results_pro_page * $page;
+        $offset = $this->results_pro_page * $page->getCurrentPage();
 
         /** @var $results */
         $results = $query_all->range($offset, $this->results_pro_page)->execute(
@@ -173,7 +175,7 @@ class TaxonomyManagerService
             }
             $my_array['name']     = $term->getName();
             $my_array['langcode'] = $term->get('langcode')->getLangcode();
-            $my_array['vid']      = $term->getVocabularyId();
+            $my_array['vid']      = \Drupal\taxonomy\Entity\Term::load($row->tid)->get('vid')->getString();
 
             $my_array['operationen'] = [
                 'data' => [

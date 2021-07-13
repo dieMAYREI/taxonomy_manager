@@ -50,7 +50,8 @@ class TaxonomyManagerMergeService
 
     $this->deleteOtherTerms($tids, $targetTid);
 
-    drupal_set_message('Merge succesfully!', 'status', true);
+    $message = \Drupal::messenger();
+    $message->addMessage('Merge succesfully!', 'status', true);
   }
 
   /**

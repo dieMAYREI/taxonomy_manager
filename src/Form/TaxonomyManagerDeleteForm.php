@@ -200,7 +200,8 @@ class TaxonomyManagerDeleteForm extends TaxonomyManagerAbstractForm {
     /** @var $options */
     $options = [];
 
-    drupal_set_message($name . ' deleted!', 'status', TRUE);
+    $message = \Drupal::messenger();
+    $message->addMessage($name . ' deleted!', 'status', TRUE);
 
     $form_state->setRedirect('taxonomy_manager.index', $vid, $options);
   }
