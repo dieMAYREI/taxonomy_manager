@@ -194,6 +194,7 @@ class TaxonomyManagerMergeService
   {
     /** @var  $query_all */
     $query_all = \Drupal::entityQuery('taxonomy_term');
+    $query_all->accessCheck(FALSE);
     $query_all->condition(
       'name',
       \Drupal::database()->escapeLike($newName),

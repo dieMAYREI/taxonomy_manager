@@ -4,6 +4,7 @@ namespace Drupal\taxonomy_manager\Form;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\taxonomy\Entity\Vocabulary;
 
 /**
  * The start form of the taxonomy manager.
@@ -256,7 +257,9 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
             $form, $form_state
         );
 
-        if(!in_array($form_state->getValue('vid'), taxonomy_vocabulary_get_names())){
+        $vocabulary = Vocabulary::load($form_state->getValue('vid'));
+
+        if(!$vocabulary){
             $form_state->setErrorByName('vid', $this->t('The Vocabulary does not exist!'));
         }
     }
