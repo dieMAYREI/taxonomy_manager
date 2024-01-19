@@ -79,19 +79,6 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
         $form['#action'] = Url::fromRoute('taxonomy_manager.index')
                 ->toString() . '?page=' . $form_state->getValue('page');
 
-        /** Selectfield with the vocabulary (vid) */
-        $form['vid'] = [
-            '#type'          => 'select',
-            '#title'         => $this->t('Vocabulary:'),
-            '#options'       => $this->arrayVids,
-            '#default_value' => $form_state->getValue('vid'),
-            '#attributes'    => [
-                'onchange' =>
-                    'document.getElementById("edit-search").value = "";
-                 this.form.submit();',
-            ],
-        ];
-
         /** Fieldset filter */
         $form['filter'] = [
             '#type'  => 'fieldset',
