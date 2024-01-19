@@ -8,14 +8,13 @@ use Drupal\taxonomy\Entity\Vocabulary;
 
 /**
  * The start form of the taxonomy manager.
- * Build the searchfield, the buttons and the table with the values.
+ * Build the search field, the buttons, and the table with the values.
  *
  * Class TaxonomyManagerForm
  *
  * @package Drupal\taxonomy_manager\Form
  */
-class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
-{
+class TaxonomyManagerForm extends TaxonomyManagerAbstractForm {
     /** @var array $header */
     private $header;
 
@@ -26,21 +25,16 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
     private $arrayVids;
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getFormId()
-    {
+    public function getFormId() {
         return 'taxonomy_manager_form';
     }
 
     /**
-     * @param array                                $form
-     * @param \Drupal\Core\Form\FormStateInterface $form_state
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function buildForm(array $form, FormStateInterface $form_state)
-    {
+    public function buildForm(array $form, FormStateInterface $form_state) {
         $this->header = [];
 
         $this->arrayVids = $this->service->getVids();
@@ -63,16 +57,10 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
             $form_state->setValue('page', $this->getRequest()->get('page'));
         }
 
-        /** Set variable searchValue if request issets */
+        /** Set variable searchValue if request isset */
         $form_state->setValue('search', '');
         if (null !== $this->getRequest()->get('search')) {
             $form_state->setValue('search', $this->getRequest()->get('search'));
-        }
-
-        /** Set variable vid if request isset */
-        $form_state->setValue('vid', '');
-        if (null !== $this->getRequest()->get('vid')) {
-            $form_state->setValue('vid', $this->getRequest()->get('vid'));
         }
 
         /** Set form action */
@@ -82,16 +70,14 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
         /** Fieldset filter */
         $form['filter'] = [
             '#type'  => 'fieldset',
-            '#title' => $this->t('search'),
+            '#title' => $this->t('Search'),
         ];
 
         /** Searchfield */
         $form['filter']['search'] = [
             '#type'        => 'search',
             '#value'       => $form_state->getValue('search'),
-            '#description' => t(
-                'Hier können mehrere Begriffe oder TIDs gleichzeitig eingegeben werden. Es werden alle Vorkommnisse der Begriffe gesucht.<br> Beachten Sie bitte, dass bei der Suche nach mehreren Begriffen jeder Begriff mit einem Komma <br> getrennt ist. Beispiel: begriff 1, begriff 2'
-            ),
+            '#description' => $this->t('Hier können mehrere Begriffe oder TIDs gleichzeitig eingegeben werden. Es werden alle Vorkommnisse der Begriffe gesucht.<br> Beachten Sie bitte, dass bei der Suche nach mehreren Begriffen jeder Begriff mit einem Komma <br> getrennt ist. Beispiel: begriff 1, begriff 2'),
         ];
 
         /** Sortfield */
@@ -139,22 +125,18 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
 
         /** Table header */
         $this->header = [
-
-            'tid' => [
+            'tid'         => [
                 'data'      => t('tid'),
                 'field'     => 'tid',
                 'sort'      => $form_state->getValue('sort'),
                 'specifier' => 'tid',
             ],
-
             'name'        => [
                 'data'      => 'name',
                 'field'     => 'name',
                 'sort'      => $form_state->getValue('sort'),
                 'specifier' => 'name',
             ],
-
-            //'name' => t('name'),
             'langcode'    => t('langcode'),
             'vid'         => t('vocabulary'),
             'operationen' => t('operations'),
@@ -163,9 +145,8 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
         /**
          * Set options of table with the results from function getResults
          */
-
         $this->results = $this->service->getResults(
-            $form_state->getValue('search'), $form_state->getValue('vid') ?: reset($this->arrayVids)
+            $form_state->getValue('search'), reset($this->arrayVids)
         );
 
         /**
@@ -187,7 +168,7 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
             '#type'       => 'tableselect',
             '#header'     => $this->header,
             '#options'    => $options,
-            '#empty'      => t('no results found!'),
+            '#empty'      => $this->t('No results found!'),
             '#attributes' => ['style' => 'margin-top: 12px;'],
         ];
 
@@ -198,84 +179,58 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
             '#result'     => $options,
             '#parameters' => [
                 'search' => $form_state->getValue('search'),
-                'vid'    => $form_state->getValue('vid'),
             ],
         ];
 
         return $form;
     }
 
-
     /**
-     * @param array              $form
-     * @param FormStateInterface $form_state
      * {@inheritdoc}
      */
-    public function submitForm(array &$form, FormStateInterface $form_state)
-    {
-        /** Rebuild the page after submit(search) with requested values vid, search and page */
+    public function submitForm(array &$form, FormStateInterface $form_state) {
+        /** Rebuild the page after submit (search) with requested values vid, search, and page */
 
         /** @var  $redirectArray */
         $redirectArray = [];
 
         if ($form_state->getValue('search') !== '') {
-            /** @noinspection ReferenceMismatchInspection */
             $redirectArray['search'] = $form_state->getValue('search');
         }
 
-        /** @noinspection ReferenceMismatchInspection */
-        $redirectArray['vid'] = $form_state->getValue('vid');
-
-        /** @var $options */
-        $options = [];
-
         $form_state->setRedirect(
-            'taxonomy_manager.index', $redirectArray, $options
+            'taxonomy_manager.index', $redirectArray, []
         );
     }
 
     /**
-     * @param array                                $form
-     * @param \Drupal\Core\Form\FormStateInterface $form_state
+     * {@inheritdoc}
      */
-    public function validateForm(array &$form, FormStateInterface $form_state)
-    {
-        parent::validateForm(
-            $form, $form_state
-        );
+    public function validateForm(array &$form, FormStateInterface $form_state) {
+        parent::validateForm($form, $form_state);
 
-        $vocabulary = Vocabulary::load($form_state->getValue('vid'));
-
-        if(!$vocabulary){
-            $form_state->setErrorByName('vid', $this->t('The Vocabulary does not exist!'));
-        }
+        // Validation if needed
     }
 
     /**
-     * @param array                                $form
-     * @param \Drupal\Core\Form\FormStateInterface $form_state
+     * {@inheritdoc}
      */
-    public function mergeSubmitHandler(array &$form, FormStateInterface $form_state)
-    {
+    public function mergeSubmitHandler(array &$form, FormStateInterface $form_state) {
         $uebergabeArray = $this->service->getSelectedTids($form, $form_state);
 
         $form_state->setRedirect(
-            'taxonomy_manager.index.merge', $uebergabeArray,
-            $options = []
+            'taxonomy_manager.index.merge', $uebergabeArray, []
         );
     }
 
     /**
-     * @param array                                $form
-     * @param \Drupal\Core\Form\FormStateInterface $form_state
+     * {@inheritdoc}
      */
-    public function deleteSubmitHandler(array &$form, FormStateInterface $form_state
-    ) {
+    public function deleteSubmitHandler(array &$form, FormStateInterface $form_state) {
         $uebergabeArray = $this->service->getSelectedTids($form, $form_state);
 
         $form_state->setRedirect(
-            'taxonomy_manager.index.multidelete', $uebergabeArray,
-            $options = []
+            'taxonomy_manager.index.multidelete', $uebergabeArray, []
         );
     }
 }
