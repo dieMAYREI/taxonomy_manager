@@ -38,3 +38,11 @@ taxonomy_manager.index.multidelete:
   requirements:
     _permission: 'taxonomy manager settings page'
 
+taxonomy_manager.index.voc:
+  path: '/admin/structure/taxonomy_manager/voc'
+  defaults:
+    _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerVocForm'
+    _title: 'Taxonomy Manager - Voc'
+  requirements:
+    _permission: 'taxonomy manager settings page'
+
