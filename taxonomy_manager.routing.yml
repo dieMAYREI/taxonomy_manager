@@ -45,4 +45,3 @@ taxonomy_manager.index.voc:
     _title: 'Taxonomy Manager - Voc'
   requirements:
     _permission: 'taxonomy manager settings page'
-

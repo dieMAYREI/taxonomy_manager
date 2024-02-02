@@ -8,229 +8,287 @@ use Drupal\taxonomy\Entity\Vocabulary;
 
 /**
  * The start form of the taxonomy manager.
- * Build the search field, the buttons, and the table with the values.
+ * Build the searchfield, the buttons and the table with the values.
  *
  * Class TaxonomyManagerForm
  *
  * @package Drupal\taxonomy_manager\Form
  */
-class TaxonomyManagerForm extends TaxonomyManagerAbstractForm {
-    /** @var array $header */
-    private $header;
+class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
+{
+  /** @var array $header */
+  private $header;
 
-    /** @var array $results */
-    private $results;
+  /** @var array $results */
+  private $results;
 
-    /** @var $arrayVids */
-    private $arrayVids;
+  /** @var $arrayVids */
+  private $arrayVids;
+
+  /**
+   * @return string
+   */
+  public function getFormId()
+  {
+    return 'taxonomy_manager_form';
+  }
+
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *
+   * @return array
+   */
+  public function buildForm(array $form, FormStateInterface $form_state)
+  {
+    $this->header = [];
+
+    $this->arrayVids = $this->service->getVids();
+
+    /** Set value of sort */
+    $form_state->setValue('sort', 'asc');
+    if (null !== $this->getRequest()->get('sort')) {
+      $form_state->setValue('sort', $this->getRequest()->get('sort'));
+    }
+
+    /** Set value of order */
+    $form_state->setValue('order', 'tid');
+    if (null !== $this->getRequest()->get('order')) {
+      $form_state->setValue('order', $this->getRequest()->get('order'));
+    }
+
+    /** Set variable page if request isset */
+    $form_state->setValue('page', 0);
+    if (null !== $this->getRequest()->get('page')) {
+      $form_state->setValue('page', $this->getRequest()->get('page'));
+    }
+
+    /** Set variable searchValue if request issets */
+    $form_state->setValue('search', '');
+    if (null !== $this->getRequest()->get('search')) {
+      $form_state->setValue('search', $this->getRequest()->get('search'));
+    }
+
+    /** Set variable vid if request isset */
+    $form_state->setValue('vid', '');
+    if (null !== $this->getRequest()->get('vid')) {
+      $form_state->setValue('vid', $this->getRequest()->get('vid'));
+    }
+
+    /** Set form action */
+    $form['#action'] = Url::fromRoute('taxonomy_manager.index')
+        ->toString() . '?page=' . $form_state->getValue('page');
+
+    /** Selectfield with the vocabulary (vid) */
+    $form['vid'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Vocabulary:'),
+      '#options' => $this->arrayVids,
+      '#default_value' => $form_state->getValue('vid'),
+      '#attributes' => [
+        'onchange' =>
+          'document.getElementById("edit-search").value = "";
+                 this.form.submit();',
+        'style' => 'width: 100%;',
+      ],
+    ];
+
+    /** Fieldset filter */
+    $form['filter'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('search'),
+    ];
+
+    /** Searchfield */
+    $form['filter']['search'] = [
+      '#type' => 'search',
+      '#value' => $form_state->getValue('search'),
+      '#description' => t(
+        'Hier können mehrere Begriffe oder TIDs gleichzeitig eingegeben werden. Es werden alle Vorkommnisse der Begriffe gesucht.<br> Beachten Sie bitte, dass bei der Suche nach mehreren Begriffen jeder Begriff mit einem Komma <br> getrennt ist. Beispiel: begriff 1, begriff 2'
+      ),
+    ];
+
+    /** Sortfield */
+    $form['filter']['sort'] = [
+      '#type' => 'hidden',
+      '#value' => $form_state->getValue('sort'),
+    ];
+
+    /** Orderfield */
+    $form['filter']['order'] = [
+      '#type' => 'hidden',
+      '#value' => $form_state->getValue('order'),
+    ];
+
+    /** SubmitButton Search */
+    $form['filter']['searchButton'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Filter'),
+      '#button_type' => 'primary',
+      '#attributes' => ['style' => 'margin-top: 8px; margin-left: 0px'],
+    ];
+
+    /** Fieldset mass_operations */
+    $form['mass_operations'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Apply to selected items'),
+    ];
+
+    /** DeleteButton */
+    $form['mass_operations']['delete'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Delete'),
+      '#button_type' => 'primary',
+      '#submit' => ['::deleteSubmitHandler'],
+    ];
+
+    /** CombineButton */
+    $form['mass_operations']['vereinen'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Merge'),
+      '#button_type' => 'primary',
+      '#submit' => ['::mergeSubmitHandler'],
+      '#attributes' => ['style' => 'margin-top: 8px;'],
+    ];
+
+    /** Table header */
+    $this->header = [
+
+      'tid' => [
+        'data' => t('tid'),
+        'field' => 'tid',
+        'sort' => $form_state->getValue('sort'),
+        'specifier' => 'tid',
+      ],
+
+      'name' => [
+        'data' => 'name',
+        'field' => 'name',
+        'sort' => $form_state->getValue('sort'),
+        'specifier' => 'name',
+      ],
+
+      //'name' => t('name'),
+      'langcode' => t('langcode'),
+      'vid' => t('vocabulary'),
+      'operationen' => t('operations'),
+    ];
 
     /**
-     * {@inheritdoc}
+     * Set options of table with the results from function getResults
      */
-    public function getFormId() {
-        return 'taxonomy_manager_form';
+
+    $this->results = $this->service->getResults(
+      $form_state->getValue('search'), $form_state->getValue('vid') ?: reset($this->arrayVids)
+    );
+
+    /**
+     * Set tid as key foreach result
+     *
+     * @var $options
+     */
+    $options = [];
+    foreach ($this->results as $result) {
+      $options[$result['tid']] = $result;
     }
 
     /**
-     * {@inheritdoc}
+     * Build table and pagination
      */
-    public function buildForm(array $form, FormStateInterface $form_state) {
-        $this->header = [];
 
-        $this->arrayVids = $this->service->getVids();
+    /** Table */
+    $form['table'] = [
+      '#type' => 'tableselect',
+      '#header' => $this->header,
+      '#options' => $options,
+      '#empty' => t('no results found!'),
+      '#attributes' => ['style' => 'margin-top: 12px;'],
+    ];
 
-        /** Set value of sort */
-        $form_state->setValue('sort', 'asc');
-        if (null !== $this->getRequest()->get('sort')) {
-            $form_state->setValue('sort', $this->getRequest()->get('sort'));
-        }
+    /** Pager */
+    $form['pager'] = [
+      '#type' => 'pager',
+      '#quantity' => '10',
+      '#result' => $options,
+      '#parameters' => [
+        'search' => $form_state->getValue('search'),
+        'vid' => $form_state->getValue('vid'),
+      ],
+    ];
 
-        /** Set value of order */
-        $form_state->setValue('order', 'tid');
-        if (null !== $this->getRequest()->get('order')) {
-            $form_state->setValue('order', $this->getRequest()->get('order'));
-        }
+    return $form;
+  }
 
-        /** Set variable page if request isset */
-        $form_state->setValue('page', 0);
-        if (null !== $this->getRequest()->get('page')) {
-            $form_state->setValue('page', $this->getRequest()->get('page'));
-        }
 
-        /** Set variable searchValue if request isset */
-        $form_state->setValue('search', '');
-        if (null !== $this->getRequest()->get('search')) {
-            $form_state->setValue('search', $this->getRequest()->get('search'));
-        }
+  /**
+   * @param array $form
+   * @param FormStateInterface $form_state
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state)
+  {
+    /** Rebuild the page after submit(search) with requested values vid, search and page */
 
-        /** Set form action */
-        $form['#action'] = Url::fromRoute('taxonomy_manager.index')
-                ->toString() . '?page=' . $form_state->getValue('page');
+    /** @var  $redirectArray */
+    $redirectArray = [];
 
-        /** Fieldset filter */
-        $form['filter'] = [
-            '#type'  => 'fieldset',
-            '#title' => $this->t('Search'),
-        ];
-
-        /** Searchfield */
-        $form['filter']['search'] = [
-            '#type'        => 'search',
-            '#value'       => $form_state->getValue('search'),
-            '#description' => $this->t('Hier können mehrere Begriffe oder TIDs gleichzeitig eingegeben werden. Es werden alle Vorkommnisse der Begriffe gesucht.<br> Beachten Sie bitte, dass bei der Suche nach mehreren Begriffen jeder Begriff mit einem Komma <br> getrennt ist. Beispiel: begriff 1, begriff 2'),
-        ];
-
-        /** Sortfield */
-        $form['filter']['sort'] = [
-            '#type'  => 'hidden',
-            '#value' => $form_state->getValue('sort'),
-        ];
-
-        /** Orderfield */
-        $form['filter']['order'] = [
-            '#type'  => 'hidden',
-            '#value' => $form_state->getValue('order'),
-        ];
-
-        /** SubmitButton Search */
-        $form['filter']['searchButton'] = [
-            '#type'        => 'submit',
-            '#value'       => $this->t('Filter'),
-            '#button_type' => 'primary',
-            '#attributes'  => ['style' => 'margin-top: 8px; margin-left: 0px'],
-        ];
-
-        /** Fieldset mass_operations */
-        $form['mass_operations'] = [
-            '#type'  => 'fieldset',
-            '#title' => $this->t('Apply to selected items'),
-        ];
-
-        /** DeleteButton */
-        $form['mass_operations']['delete'] = [
-            '#type'        => 'submit',
-            '#value'       => $this->t('Delete'),
-            '#button_type' => 'primary',
-            '#submit'      => ['::deleteSubmitHandler'],
-        ];
-
-        /** CombineButton */
-        $form['mass_operations']['vereinen'] = [
-            '#type'        => 'submit',
-            '#value'       => $this->t('Merge'),
-            '#button_type' => 'primary',
-            '#submit'      => ['::mergeSubmitHandler'],
-            '#attributes'  => ['style' => 'margin-top: 8px;'],
-        ];
-
-        /** Table header */
-        $this->header = [
-            'tid'         => [
-                'data'      => t('tid'),
-                'field'     => 'tid',
-                'sort'      => $form_state->getValue('sort'),
-                'specifier' => 'tid',
-            ],
-            'name'        => [
-                'data'      => 'name',
-                'field'     => 'name',
-                'sort'      => $form_state->getValue('sort'),
-                'specifier' => 'name',
-            ],
-            'langcode'    => t('langcode'),
-            'vid'         => t('vocabulary'),
-            'operationen' => t('operations'),
-        ];
-
-        /**
-         * Set options of table with the results from function getResults
-         */
-        $this->results = $this->service->getResults(
-            $form_state->getValue('search'), reset($this->arrayVids)
-        );
-
-        /**
-         * Set tid as key foreach result
-         *
-         * @var $options
-         */
-        $options = [];
-        foreach ($this->results as $result) {
-            $options[$result['tid']] = $result;
-        }
-
-        /**
-         * Build table and pagination
-         */
-
-        /** Table */
-        $form['table'] = [
-            '#type'       => 'tableselect',
-            '#header'     => $this->header,
-            '#options'    => $options,
-            '#empty'      => $this->t('No results found!'),
-            '#attributes' => ['style' => 'margin-top: 12px;'],
-        ];
-
-        /** Pager */
-        $form['pager'] = [
-            '#type'       => 'pager',
-            '#quantity'   => '10',
-            '#result'     => $options,
-            '#parameters' => [
-                'search' => $form_state->getValue('search'),
-            ],
-        ];
-
-        return $form;
+    if ($form_state->getValue('search') !== '') {
+      /** @noinspection ReferenceMismatchInspection */
+      $redirectArray['search'] = $form_state->getValue('search');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function submitForm(array &$form, FormStateInterface $form_state) {
-        /** Rebuild the page after submit (search) with requested values vid, search, and page */
+    /** @noinspection ReferenceMismatchInspection */
+    $redirectArray['vid'] = $form_state->getValue('vid');
 
-        /** @var  $redirectArray */
-        $redirectArray = [];
+    /** @var $options */
+    $options = [];
 
-        if ($form_state->getValue('search') !== '') {
-            $redirectArray['search'] = $form_state->getValue('search');
-        }
+    $form_state->setRedirect(
+      'taxonomy_manager.index', $redirectArray, $options
+    );
+  }
 
-        $form_state->setRedirect(
-            'taxonomy_manager.index', $redirectArray, []
-        );
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state)
+  {
+    parent::validateForm(
+      $form, $form_state
+    );
+
+    if (!in_array($form_state->getValue('vid'), taxonomy_vocabulary_get_names())) {
+      $form_state->setErrorByName('vid', $this->t('The Vocabulary does not exist!'));
     }
+  }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validateForm(array &$form, FormStateInterface $form_state) {
-        parent::validateForm($form, $form_state);
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   */
+  public function mergeSubmitHandler(array &$form, FormStateInterface $form_state)
+  {
+    $uebergabeArray = $this->service->getSelectedTids($form, $form_state);
 
-        // Validation if needed
-    }
+    $form_state->setRedirect(
+      'taxonomy_manager.index.merge', $uebergabeArray,
+      $options = []
+    );
+  }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function mergeSubmitHandler(array &$form, FormStateInterface $form_state) {
-        $uebergabeArray = $this->service->getSelectedTids($form, $form_state);
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   */
+  public function deleteSubmitHandler(array &$form, FormStateInterface $form_state
+  )
+  {
+    $uebergabeArray = $this->service->getSelectedTids($form, $form_state);
 
-        $form_state->setRedirect(
-            'taxonomy_manager.index.merge', $uebergabeArray, []
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteSubmitHandler(array &$form, FormStateInterface $form_state) {
-        $uebergabeArray = $this->service->getSelectedTids($form, $form_state);
-
-        $form_state->setRedirect(
-            'taxonomy_manager.index.multidelete', $uebergabeArray, []
-        );
-    }
+    $form_state->setRedirect(
+      'taxonomy_manager.index.multidelete', $uebergabeArray,
+      $options = []
+    );
+  }
 }
