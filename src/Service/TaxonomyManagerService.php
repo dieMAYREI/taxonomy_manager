@@ -368,7 +368,8 @@ class TaxonomyManagerService
         $return = [];
 
         /** @var  $query_all */
-        $query_all = \Drupal::entityQuery('taxonomy_vocabulary');
+        $query_all = \Drupal::entityQuery('taxonomy_vocabulary')
+        ->accessCheck(FALSE);
 
         /** @var  $vids */
         $vids = $query_all->execute();
