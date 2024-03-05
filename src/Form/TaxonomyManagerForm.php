@@ -258,7 +258,7 @@ class TaxonomyManagerForm extends TaxonomyManagerAbstractForm
       $form, $form_state
     );
 
-    if (!in_array($form_state->getValue('vid'), \Drupal::entityQuery('taxonomy_vocabulary')->accesCheck(FALSE)->execute())) {
+    if (!in_array($form_state->getValue('vid'), \Drupal::entityQuery('taxonomy_vocabulary')->execute())) {
       $form_state->setErrorByName('vid', $this->t('The Vocabulary does not exist!'));
     }
   }
